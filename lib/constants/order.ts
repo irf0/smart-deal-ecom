@@ -1,4 +1,3 @@
-export type OrderStatus = 'new' | 'confirmed' | 'shipped' | 'completed' | 'cancelled'
 
 export const ORDER_STATUS_LABELS: Record<string, string> = {
     new: 'New',

@@ -3,8 +3,9 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import OrderTabs from '@/components/admin/order-tabs'
 import OrderFilters from '@/components/admin/order-filters'
-import { ORDER_STATUS_LABELS, ORDER_STATUS_STYLES, OrderStatus } from '@/lib/constants/order'
+import { ORDER_STATUS_LABELS, ORDER_STATUS_STYLES } from '@/lib/constants/order'
 
+export type OrderStatus = 'new' | 'confirmed' | 'shipped' | 'completed' | 'cancelled'
 
 const PAGE_SIZE = 20
 

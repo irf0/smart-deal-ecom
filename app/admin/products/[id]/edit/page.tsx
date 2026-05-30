@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import ProductForm from '@/components/admin/product-form'
 import IMEISection from '@/components/admin/imei-section'
-import { Separator } from '@/components/ui/separator'
 
 interface Props {
     params: Promise<{ id: string }>
