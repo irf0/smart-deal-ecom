@@ -5,20 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import DeleteProductButton from '@/components/admin/delete-product-button'
 import ProductFilters from '@/components/admin/product-filters'
 import ProductPagination from '@/components/admin/product-pagination'
-
-const CONDITION_STYLES: Record<string, string> = {
-    like_new: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-    good: 'bg-blue-100 text-blue-700 border-blue-200',
-    fair: 'bg-amber-100 text-amber-700 border-amber-200',
-    poor: 'bg-red-100 text-red-700 border-red-200',
-}
-
-const CONDITION_LABELS: Record<string, string> = {
-    like_new: 'Like New',
-    good: 'Good',
-    fair: 'Fair',
-    poor: 'Poor',
-}
+import { CONDITION_LABELS, CONDITION_STYLES } from '@/lib/constants/products'
 
 const PAGE_SIZE = 20
 
@@ -94,7 +81,43 @@ export default async function ProductsPage({ searchParams }: Props) {
 
             <ProductFilters categories={categories ?? []} current={filters} />
 
-            <div className="bg-white rounded-lg border overflow-hidden mt-4">
+            {/* Mobile card layout */}
+            <div className="flex flex-col gap-3 mt-4 md:hidden">
+                {products?.map(product => {
+                    const thumbnail = product.product_images
+                        ?.sort((a: any, b: any) => a.position - b.position)[0]?.url
+                    return (
+                        <div key={product.id} className="bg-white rounded-lg border p-3 flex items-center gap-3">
+                            {thumbnail ? (
+                                <img src={thumbnail} className="w-14 h-14 object-cover rounded border flex-shrink-0" />
+                            ) : (
+                                <div className="w-14 h-14 bg-gray-100 rounded border flex items-center justify-center text-gray-400 text-xs flex-shrink-0">No img</div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">{product.brand} {product.model}</p>
+                                <p className="text-gray-500 text-sm mt-0.5">₹{product.price.toLocaleString('en-IN')}</p>
+                                <Badge className={`mt-1 ${product.status === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                                    {product.status === 'available' ? 'Available' : 'Unavailable'}
+                                </Badge>
+                            </div>
+                            <div className="flex flex-col gap-2 flex-shrink-0">
+                                <Button asChild variant="outline" size="sm" className="cursor-pointer">
+                                    <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
+                                </Button>
+                                <DeleteProductButton id={product.id} />
+                            </div>
+                        </div>
+                    )
+                })}
+                {!products?.length && (
+                    <div className="bg-white rounded-lg border px-4 py-10 text-center text-gray-400">
+                        {activeFilterCount > 0 ? 'No products match your filters.' : 'No products yet.'}
+                    </div>
+                )}
+            </div>
+
+            {/* Desktop table layout */}
+            <div className="bg-white rounded-lg border overflow-hidden mt-4 hidden md:block">
                 <table className="w-full text-sm">
                     <thead className="bg-gray-50 border-b">
                         <tr>
@@ -182,6 +205,16 @@ export default async function ProductsPage({ searchParams }: Props) {
                     </div>
                 )}
             </div>
+
+            {totalPages > 1 && (
+                <div className="border-t px-4 py-3 md:hidden">
+                    <ProductPagination
+                        page={page}
+                        totalPages={totalPages}
+                        filters={filters}
+                    />
+                </div>
+            )}
         </div>
     )
 }

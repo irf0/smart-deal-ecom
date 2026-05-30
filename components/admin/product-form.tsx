@@ -29,8 +29,6 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-// ─── Sortable image item ──────────────────────────────────────────────────────
-
 type ImageItem =
     | { kind: 'existing'; id: string; url: string }
     | { kind: 'new'; id: string; file: File; preview: string }
@@ -60,8 +58,6 @@ function SortableImage({
             className="relative w-24 h-24 rounded border overflow-hidden group bg-gray-100"
         >
             <img src={src} className="w-full h-full object-cover" />
-
-            {/* drag handle */}
             <div
                 {...attributes}
                 {...listeners}
@@ -69,8 +65,6 @@ function SortableImage({
             >
                 <GripVertical className="w-3 h-3" />
             </div>
-
-            {/* remove */}
             <button
                 type="button"
                 onClick={() => onRemove(item.id)}
@@ -78,13 +72,9 @@ function SortableImage({
             >
                 <X className="w-3 h-3" />
             </button>
-
-            {/* first = cover badge */}
         </div>
     )
 }
-
-// ─── Main form ────────────────────────────────────────────────────────────────
 
 type ProductFormProps = {
     categories: Category[]
@@ -122,7 +112,6 @@ export default function ProductForm({ categories, product, images = [] }: Produc
     const [status, setStatus] = useState(product?.status ?? 'available')
     const [stockCount, setStockCount] = useState(product?.stock_count?.toString() ?? '1')
 
-    // unified image list — existing + new, ordered
     const [imageItems, setImageItems] = useState<ImageItem[]>(
         images
             .slice()
@@ -203,7 +192,6 @@ export default function ProductForm({ categories, product, images = [] }: Produc
                 productId = data.id
             }
 
-            // Persist image order for existing images
             const existingInOrder = imageItems.filter(i => i.kind === 'existing')
             await Promise.all(
                 existingInOrder.map((item, position) =>
@@ -211,7 +199,6 @@ export default function ProductForm({ categories, product, images = [] }: Produc
                 )
             )
 
-            // Upload new images in their ordered position
             let position = existingInOrder.length
             for (const item of imageItems) {
                 if (item.kind !== 'new') continue
@@ -239,7 +226,7 @@ export default function ProductForm({ categories, product, images = [] }: Produc
 
             <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                         <Label>Category</Label>
                         <Select value={categoryId} onValueChange={setCategoryId} required>
@@ -269,7 +256,7 @@ export default function ProductForm({ categories, product, images = [] }: Produc
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                         <Label>Brand</Label>
                         <Input autoFocus={!isEdit} value={brand} onChange={e => setBrand(e.target.value)} required />
@@ -280,7 +267,7 @@ export default function ProductForm({ categories, product, images = [] }: Produc
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                         <Label>Price (₹)</Label>
                         <Input type="number" value={price} onChange={e => setPrice(e.target.value)} required min={0} />
@@ -306,7 +293,7 @@ export default function ProductForm({ categories, product, images = [] }: Produc
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                         <Label>Status</Label>
                         <Select value={status} onValueChange={setStatus}>
@@ -325,7 +312,6 @@ export default function ProductForm({ categories, product, images = [] }: Produc
                     </div>
                 </div>
 
-                {/* ── Images ── */}
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
                         <Label>Images <span className="text-gray-400 font-normal">(max 5)</span></Label>
