@@ -1,5 +1,6 @@
 import { AvailableProductsCard } from "@/components/dashboard/available-product-card";
 import { PendingOrdersCard } from "@/components/dashboard/pending-orders-card";
+import { RecentOrders } from "@/components/dashboard/recent-orders";
 import { SoldProductsCard } from "@/components/dashboard/sold-products-card";
 import { TotalProductsCard } from "@/components/dashboard/total-products-card";
 
@@ -12,6 +13,7 @@ export default function DashboardPage() {
                 <SoldProductsCard />
                 <PendingOrdersCard />
             </div>
+            <RecentOrders />
         </div>
     )
 }
