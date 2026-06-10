@@ -12,15 +12,27 @@ export type Product = {
     brand: string
     model: string
     slug: string
-    condition: 'like_new' | 'good' | 'fair' | 'poor'
-    price: number
-    original_price: number | null
     description: string | null
     specs: string | null
-    status: 'available' | 'unavailable'
-    stock_count: number
+    ram_gb: number | null
+    storage_gb: number | null
+    network_type: '4G' | '5G' | null
+    os: 'iOS' | 'Android' | 'Windows' | 'macOS' | null
+    color: string | null
     created_at: string
     updated_at: string
+}
+
+export type ProductVariant = {
+    id: string
+    product_id: string
+    condition: 'grade_a' | 'grade_b_plus' | 'grade_b' | 'grade_c_plus' | 'grade_c'
+    price: number
+    original_price: number | null
+    stock_count: number
+    battery_health: number | null
+    status: 'available' | 'unavailable'
+    created_at: string
 }
 
 export type ProductImage = {
@@ -33,7 +45,7 @@ export type ProductImage = {
 
 export type ProductIdentifier = {
     id: string
-    product_id: string
+    variant_id: string
     identifier: string
     status: 'available' | 'sold'
     created_at: string
@@ -55,6 +67,7 @@ export type OrderItem = {
     id: string
     order_id: string
     product_id: string
+    variant_id: string
     identifier_id: string | null
     price: number
     created_at: string
