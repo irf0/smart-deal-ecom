@@ -4,7 +4,7 @@ import Footer from '@/components/store/footer'
 import AuthModal from '@/components/store/auth-modal'
 
 export const metadata: Metadata = {
-    title: 'Smart Deal — Best Second Hand Gadgets in Kerala',
+    title: 'Smart Deal',
     description: 'Buy certified second hand phones, laptops, tablets and accessories at the best prices.',
 }
 
