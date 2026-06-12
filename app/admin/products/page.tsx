@@ -21,8 +21,8 @@ export default async function ProductsPage() {
         <div>
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold">Products</h1>
-                <Button asChild className="cursor-pointer">
-                    <Link href="/admin/products/new">Add Product</Link>
+                <Button asChild className="px-4 py-4 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 transition-colors cursor-pointer">
+                    <Link href="/admin/products/new">+ New Product</Link>
                 </Button>
             </div>
 

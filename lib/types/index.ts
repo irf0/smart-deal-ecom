@@ -5,22 +5,28 @@ export type Category = {
     created_at: string
 }
 
-export type Product = {
-    id: string
-    category_id: string
-    sku: string
+export type StorefrontProduct = {
+    // from product_variants
+    variant_id: string
+    condition: 'grade_a' | 'grade_b_plus' | 'grade_b' | 'grade_c_plus' | 'grade_c'
+    price: number
+    original_price: number | null
+    stock_count: number
+    battery_health: number | null
+    // from products
+    product_id: string
     brand: string
     model: string
     slug: string
-    description: string | null
-    specs: string | null
     ram_gb: number | null
     storage_gb: number | null
-    network_type: '4G' | '5G' | null
-    os: 'iOS' | 'Android' | 'Windows' | 'macOS' | null
+    network_type: string | null
+    os: string | null
     color: string | null
-    created_at: string
-    updated_at: string
+    // from categories
+    category: string
+    // from product_images
+    image_url: string | null
 }
 
 export type ProductVariant = {
@@ -72,3 +78,15 @@ export type OrderItem = {
     price: number
     created_at: string
 }
+
+export type User = {
+    name: string;
+    city: string;
+    whatsapp: string
+}
+
+export type FetchState =
+    | { status: 'idle' }
+    | { status: 'loading' }
+    | { status: 'success'; data: StorefrontProduct[] }
+    | { status: 'error'; message: string; retryable: boolean }

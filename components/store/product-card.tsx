@@ -1,84 +1,109 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
+import { ImageOff } from 'lucide-react'
+import { CONDITION_STYLES, CONDITION_LABELS } from '@/lib/constants/products'
+import type { StorefrontProduct } from '@/lib/types'
 
-type Props = {
-    id: string
-    slug: string
-    brand: string
-    model: string
-    price: number
-    original_price: number | null
-    condition: string
-    status: string
-    image: string | null
-    category: string
-}
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? ''
 
-const conditionColors: Record<string, string> = {
-    like_new: 'bg-green-100 text-green-700',
-    good: 'bg-blue-100 text-blue-700',
-    fair: 'bg-yellow-100 text-yellow-700',
-    poor: 'bg-red-100 text-red-700',
-}
+function ProductImage({ src, alt }: { src: string; alt: string }) {
+    const [state, setState] = useState<'loading' | 'loaded' | 'error'>('loading')
 
-const conditionLabels: Record<string, string> = {
-    like_new: 'Like New',
-    good: 'Good',
-    fair: 'Fair',
-    poor: 'Poor',
-}
-
-export default function ProductCard({
-    slug, brand, model, price, original_price, condition, image, category
-}: Props) {
     return (
-        <Link href={`/products/${slug}`} className="group block">
-            <div className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                {/* Image */}
-                <div className="aspect-square bg-gray-50 overflow-hidden">
-                    {image ? (
-                        <img
-                            src={image}
-                            alt={`${brand} ${model}`}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm">
-                            No image
-                        </div>
+        <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+            {state === 'loading' && (
+                <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+            )}
+            {state === 'error' && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-400 gap-1.5">
+                    <ImageOff className="w-6 h-6" />
+                    <span className="text-[10px]">No image</span>
+                </div>
+            )}
+            <img
+                src={src}
+                alt={alt}
+                onLoad={() => setState('loaded')}
+                onError={() => setState('error')}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${state === 'loaded' ? 'opacity-100' : 'opacity-0'
+                    }`}
+            />
+        </div>
+    )
+}
+
+export function ProductCard({ product }: { product: StorefrontProduct }) {
+    const title = `${product.brand} ${product.model}`
+    console.log('product slug:', product.slug)
+
+    const specs = [
+        product.ram_gb ? `${product.ram_gb}GB RAM` : null,
+        product.storage_gb ? `${product.storage_gb}GB` : null,
+        product.network_type ?? null,
+    ].filter(Boolean).join(' · ')
+
+    function openWhatsApp(e: React.MouseEvent) {
+        e.preventDefault()
+        const msg = encodeURIComponent(
+            `Hi, I'm interested in: ${title} (${CONDITION_LABELS[product.condition]})`
+        )
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank')
+    }
+
+    return (
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+            <Link href={`/product/${product.slug}`} className="flex flex-col flex-1">
+                <div className="relative">
+                    <ProductImage src={product.image_url ?? ''} alt={title} />
+                    <span className={`absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${CONDITION_STYLES[product.condition]}`}>
+                        {CONDITION_LABELS[product.condition]}
+                    </span>
+                    {product.original_price && product.original_price > product.price && (
+                        <span className="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500 text-white">
+                            {Math.round((1 - product.price / product.original_price) * 100)}% off
+                        </span>
                     )}
                 </div>
 
-                {/* Info */}
-                <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide">{category}</span>
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${conditionColors[condition]}`}>
-                            {conditionLabels[condition]}
-                        </span>
-                    </div>
-
-                    <h3 className="font-semibold text-gray-900 mb-3 leading-tight">
-                        {brand} {model}
-                    </h3>
-
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold text-[#2563EB]">
-                                ₹{price.toLocaleString('en-IN')}
+                <div className="p-3 flex flex-col gap-2 flex-1">
+                    <div>
+                        <p className="text-gray-900 font-semibold text-sm leading-snug line-clamp-2">
+                            {title}
+                        </p>
+                        {specs && (
+                            <p className="text-gray-400 text-[11px] mt-0.5">{specs}</p>
+                        )}
+                        <div className="flex items-baseline gap-2 mt-1">
+                            <p className="text-[#2563EB] font-bold text-base">
+                                ₹{product.price.toLocaleString('en-IN')}
                             </p>
-                            {original_price && (
-                                <p className="text-xs text-gray-400 line-through">
-                                    ₹{original_price.toLocaleString('en-IN')}
+                            {product.original_price && product.original_price > product.price && (
+                                <p className="text-gray-400 text-xs line-through">
+                                    ₹{product.original_price.toLocaleString('en-IN')}
                                 </p>
                             )}
                         </div>
-                        <span className="text-xs font-medium text-[#6366F1] group-hover:underline">
-                            View Deal →
-                        </span>
                     </div>
                 </div>
+
+            </Link>
+
+            {/* WhatsApp button outside the Link */}
+            <div className="px-3 pb-3">
+                <button
+                    onClick={openWhatsApp}
+                    className="w-full flex items-center justify-center gap-1.5 bg-gray-50 hover:bg-[#25D366] hover:text-white border border-gray-200 hover:border-[#25D366] text-gray-700 text-xs font-medium rounded-xl py-2 transition-colors duration-200"
+                >
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                        alt="WhatsApp"
+                        className="w-3.5 h-3.5"
+                    />
+                    Contact Seller
+                </button>
             </div>
-        </Link>
+        </div>
     )
 }

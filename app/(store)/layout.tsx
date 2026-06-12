@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Navbar from '@/components/store/navbar'
 import Footer from '@/components/store/footer'
+import AuthModal from '@/components/store/auth-modal'
 
 export const metadata: Metadata = {
     title: 'Smart Deal — Best Second Hand Gadgets in Kerala',
@@ -15,10 +16,12 @@ export default function StoreLayout({
     return (
         <div className="min-h-screen flex flex-col bg-brand-silver">
             <Navbar />
+
             <main className="flex-1">
                 {children}
             </main>
             <Footer />
+            <AuthModal />
         </div>
     )
 }

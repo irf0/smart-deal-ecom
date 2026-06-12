@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Package, ShoppingCart, LogOut, X } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingCart, Tag, LogOut, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const links = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/products', label: 'Products', icon: Package },
     { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+    { href: '/admin/coupon', label: 'Coupons', icon: Tag },
 ]
 
 export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {

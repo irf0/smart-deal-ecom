@@ -1,8 +1,10 @@
-import React from 'react'
+import ProductListing from '@/components/store/product-listing'
 
-export default async function ProductsPage() {
+export default async function ProductPage() {
     return (
-        <div>Products Page</div>
+        <div>
+            <ProductListing />
+        </div>
     )
 }
 
