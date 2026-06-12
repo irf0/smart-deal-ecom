@@ -35,7 +35,12 @@ const categories = [
 export default function CategoryCards() {
     return (
         <section className="max-w-6xl mx-auto px-4 py-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Shop by Category</h2>
+            <div className='flex justify-between items-baseline mb-6'>
+                <h2 className="text-2xl font-bold text-gray-900">Shop by Category</h2>
+                <Link href='/product'>
+                    <h2 className="text-md font-bold text-gray-900">View All</h2>
+                </Link>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {categories.map(cat => {
                     const Icon = cat.icon
