@@ -16,7 +16,7 @@ export default function CategoryFilter() {
     const active = searchParams.get('category') ?? ''
 
     function handleClick(value: string) {
-        const params = new URLSearchParams(searchParams.toString())
+        const params = new URLSearchParams(searchParams?.toString())
         if (value) {
             params.set('category', value)
         } else {
@@ -32,8 +32,8 @@ export default function CategoryFilter() {
                     key={cat.value}
                     onClick={() => handleClick(cat.value)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer ${active === cat.value
-                            ? 'bg-[#2563EB] text-white'
-                            : 'bg-white text-gray-600 border border-gray-200 hover:border-[#2563EB] hover:text-[#2563EB]'
+                        ? 'bg-[#2563EB] text-white'
+                        : 'bg-white text-gray-600 border border-gray-200 hover:border-[#2563EB] hover:text-[#2563EB]'
                         }`}
                 >
                     {cat.label}

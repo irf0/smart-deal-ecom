@@ -1,10 +1,10 @@
+import { Suspense } from 'react'
 import ProductListing from '@/components/store/product-listing'
 
-export default async function ProductPage() {
+export default function ProductPage() {
     return (
-        <div>
+        <Suspense fallback={<div>Loading...</div>}>
             <ProductListing />
-        </div>
+        </Suspense>
     )
 }
-
