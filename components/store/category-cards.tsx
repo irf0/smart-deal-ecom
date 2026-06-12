@@ -4,28 +4,28 @@ import { Smartphone, Laptop, Tablet, Headphones } from 'lucide-react'
 const categories = [
     {
         label: 'Phones',
-        slug: 'phones',
+        slug: 'Phones',
         icon: Smartphone,
         color: 'bg-blue-50 text-[#2563EB]',
         description: 'iPhones, Androids & more'
     },
     {
         label: 'Laptops',
-        slug: 'laptops',
+        slug: 'Laptops',
         icon: Laptop,
         color: 'bg-indigo-50 text-[#6366F1]',
         description: 'MacBooks, ThinkPads & more'
     },
     {
         label: 'Tablets',
-        slug: 'tablets',
+        slug: 'Tablets',
         icon: Tablet,
         color: 'bg-purple-50 text-purple-600',
         description: 'iPads, Android tablets & more'
     },
     {
         label: 'Accessories',
-        slug: 'accessories',
+        slug: 'Accessories',
         icon: Headphones,
         color: 'bg-green-50 text-green-600',
         description: 'Chargers, cases & more'
@@ -47,7 +47,7 @@ export default function CategoryCards() {
                     return (
                         <Link
                             key={cat.slug}
-                            href={`/products?category=${cat.slug}`}
+                            href={`/product?category=${cat.slug}`}
                             className="group bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
                         >
                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${cat.color}`}>
