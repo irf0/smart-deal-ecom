@@ -1,6 +1,6 @@
 import type { StorefrontProduct } from '@/lib/types'
 
-export const CATEGORIES = ['All', 'Phones', 'Laptops', 'Tablets', 'Audio / Earphones', 'Accessories']
+export const CATEGORIES = ['All', 'Phones', 'Laptops', 'Tablets', 'Accessories']
 export const CONDITIONS = ['grade_a', 'grade_b_plus', 'grade_b', 'grade_c_plus', 'grade_c'] as const
 export const BRANDS = ['Apple', 'Samsung', 'OnePlus', 'Sony', 'Dell', 'HP', 'Lenovo', 'Xiaomi', 'Realme', 'Nothing']
 export const RAM = [2, 4, 6, 8, 12, 16, 32]

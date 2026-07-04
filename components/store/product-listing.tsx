@@ -62,10 +62,10 @@ function ProductListingInner() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-surface bg-gray-50">
 
             {/* Top bar */}
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
+            <div className="border-b border-gray-200 sticky top-0 z-20">
                 <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-2.5">
 
                     <div className="flex items-center gap-2">
@@ -108,8 +108,8 @@ function ProductListingInner() {
                                 disabled={isLoading}
                                 className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors disabled:opacity-50
                                     ${state.category === cat
-                                        ? 'bg-[#2563EB] text-white border-[#2563EB]'
-                                        : 'bg-white text-gray-600 border-gray-300 hover:border-[#2563EB] hover:text-[#2563EB]'
+                                        ? 'bg-accent text-white border-accent'
+                                        : 'bg-surface text-gray-600 border-gray-300 hover:border-accent-hover hover:text-accent'
                                     }`}
                             >
                                 {cat}
@@ -124,7 +124,7 @@ function ProductListingInner() {
             <div className="max-w-7xl mx-auto px-4 py-5 flex gap-5 items-start">
 
                 {/* Desktop sidebar */}
-                <aside className="hidden lg:flex flex-col w-56 shrink-0 bg-white rounded-2xl border border-gray-200 sticky top-[105px] max-h-[calc(100vh-120px)] overflow-y-auto">
+                <aside className="hidden lg:flex flex-col w-56 shrink-0 bg-surface rounded-2xl border border-gray-200 sticky top-[105px] max-h-[calc(100vh-120px)] overflow-y-auto custom-scrollbar">
                     {isLoading
                         ? <SkeletonSidebar />
                         : <FilterPanel state={state} set={set} disabled={fetchState.status === 'error'} />

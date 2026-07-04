@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartDeal — Color Scheme Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Proposed palette */
+      --base: #FAFAFA;
+      --base-alt: #F7F7F5;
+      --ink: #1A1A1A;
+      --ink-secondary: #2B2B2B;
+      --ink-muted: #6B6B6B;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --primary-navy: #1E3A5F;
+      --primary-navy-hover: #162D4A;
+      --cta: #D4532A;
+      --cta-hover: #B8431F;
+      --cta-warm: #E8823C;
+      --success: #3A8F5C;
+      --border: rgba(26, 26, 26, 0.08);
+      --shadow-dark: 200 200 200;
+      --shadow-light: 255 255 255;
+
+      --active-primary: var(--primary);
+      --active-primary-hover: var(--primary-hover);
+    }
+
+    body.navy-mode {
+      --active-primary: var(--primary-navy);
+      --active-primary-hover: var(--primary-navy-hover);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #E8E8E6;
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-header {
+      background: var(--ink);
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
+    .page-header p { margin-top: 0.4rem; font-size: 0.875rem; color: rgba(255,255,255,0.65); max-width: 36rem; margin-inline: auto; }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .control-btn {
+      font: inherit;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .control-btn.blue { background: #2563EB; color: #fff; }
+    .control-btn.navy { background: #1E3A5F; color: #fff; }
+    .control-btn.current { background: #F0E6D8; color: #2C2218; border-color: #C8B8A4; }
+    .control-btn.active { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+    .layout {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      gap: 2rem;
+    }
+
+    /* Palette swatches */
+    .palette-section h2,
+    .compare-section h2,
+    .mock-section h2 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+    .swatch {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .swatch-color { height: 64px; }
+    .swatch-info { padding: 0.6rem 0.75rem; }
+    .swatch-info strong { display: block; font-size: 0.75rem; font-weight: 600; }
+    .swatch-info span { font-size: 0.7rem; color: var(--ink-muted); font-family: ui-monospace, monospace; }
+
+    /* Side-by-side compare */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 700px) { .compare-grid { grid-template-columns: 1fr; } }
+
+    .compare-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .compare-label {
+      padding: 0.5rem 1rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .compare-label.current { background: #C8B8A4; color: #2C2218; }
+    .compare-label.proposed { background: var(--active-primary); color: #fff; }
+
+    /* Mock storefront */
+    .mock-store {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+
+    .mock-store.current-theme {
+      --m-surface: #F0E6D8;
+      --m-surface-light: #FFFAF4;
+      --m-ink: #2C2218;
+      --m-ink-muted: #6E5F4F;
+      --m-accent: #D4532A;
+      --m-primary: #D4532A;
+      --m-hero-from: #D4532A;
+      --m-hero-via: #E8783A;
+      --m-hero-to: #E8A317;
+      --m-shadow-dark: 200 184 164;
+      --m-shadow-light: 255 250 244;
+    }
+
+    .mock-store.proposed-theme {
+      --m-surface: var(--base);
+      --m-surface-light: var(--base-alt);
+      --m-ink: var(--ink);
+      --m-ink-muted: var(--ink-muted);
+      --m-accent: var(--cta);
+      --m-primary: var(--active-primary);
+      --m-hero-from: var(--active-primary);
+      --m-hero-via: #3B82F6;
+      --m-hero-to: #1E40AF;
+      --m-shadow-dark: 210 210 210;
+      --m-shadow-light: 255 255 255;
+    }
+
+    .neu-raised {
+      box-shadow:
+        6px 6px 14px rgb(var(--m-shadow-dark) / 0.35),
+        -4px -4px 12px rgb(var(--m-shadow-light) / 0.9);
+    }
+    .neu-raised-sm {
+      box-shadow:
+        3px 3px 8px rgb(var(--m-shadow-dark) / 0.28),
+        -2px -2px 6px rgb(var(--m-shadow-light) / 0.85);
+    }
+
+    .mock-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      height: 56px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .mock-logo { font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--m-ink); }
+    .mock-nav-links { display: flex; gap: 1.25rem; font-size: 0.8rem; }
+    .mock-nav-links a { color: var(--m-ink-muted); text-decoration: none; font-weight: 500; }
+    .mock-nav-links a.deals { color: var(--cta-warm); font-weight: 600; }
+    .mock-nav-links a:hover { color: var(--m-ink); }
+
+    .mock-body { background: var(--m-surface); color: var(--m-ink); padding-bottom: 1.5rem; }
+
+    .mock-hero {
+      margin: 1rem 1.25rem 0;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--m-hero-from), var(--m-hero-via), var(--m-hero-to));
+      padding: 2rem 1.5rem;
+      position: relative;
+      min-height: 200px;
+    }
+    .mock-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2), transparent 55%);
+      pointer-events: none;
+    }
+    .mock-hero * { position: relative; z-index: 1; }
+    .mock-eyebrow { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.85); }
+    .mock-hero h2 { margin-top: 0.5rem; font-size: 1.6rem; font-weight: 700; color: #fff; line-height: 1.15; letter-spacing: -0.02em; }
+    .mock-hero h2 em { font-style: normal; color: var(--cta-warm); }
+    .mock-hero p { margin-top: 0.5rem; font-size: 0.8rem; color: rgba(255,255,255,0.85); max-width: 22rem; }
+    .mock-hero-btns { margin-top: 1rem; display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.5rem;
+      padding: 0 1.25rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: none;
+      cursor: default;
+      text-decoration: none;
+    }
+    .btn-cta { background: var(--cta); color: #fff; }
+    .btn-cta:hover { background: var(--cta-hover); }
+    .btn-primary { background: var(--m-primary); color: #fff; }
+    .btn-ghost { background: #fff; color: var(--m-accent); }
+    .btn-outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.5); }
+
+    .mock-trust {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+      padding: 1rem 1.25rem 0;
+    }
+    @media (max-width: 600px) { .mock-trust { grid-template-columns: repeat(2, 1fr); } }
+    .trust-item {
+      background: var(--m-surface-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+    .trust-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 8px;
+      margin: 0 auto 0.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .mock-section-inner { padding: 1.25rem 1.25rem 0; }
+    .section-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--m-primary); }
+    .section-title { font-size: 1.15rem; font-weight: 700; margin-top: 0.2rem; letter-spacing: -0.02em; }
+    .section-sub { font-size: 0.75rem; color: var(--m-ink-muted); margin-top: 0.15rem; }
+
+    .mock-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 600px) { .mock-cards { grid-template-columns: repeat(2, 1fr); } }
+
+    .deal-card {
+      background: var(--m-surface-light);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .deal-img {
+      aspect-ratio: 4/3;
+      background: linear-gradient(145deg, #e8e8e8, #f5f5f5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #ccc;
+    }
+    .deal-body { padding: 0.6rem; }
+    .deal-brand { font-size: 0.6rem; color: var(--m-ink-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .deal-name { font-size: 0.75rem; font-weight: 600; margin-top: 0.1rem; }
+    .deal-price { font-size: 0.85rem; font-weight: 700; margin-top: 0.3rem; color: var(--m-ink); }
+    .deal-price s { font-size: 0.65rem; color: var(--m-ink-muted); font-weight: 400; margin-left: 0.25rem; }
+    .deal-badge {
+      display: inline-block;
+      font-size: 0.55rem;
+      font-weight: 600;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      margin-top: 0.3rem;
+    }
+
+    .usage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .usage-card {
+      background: var(--base);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    .usage-card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .usage-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; font-size: 0.75rem; color: var(--ink-muted); }
+    .usage-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    .note {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+    .note strong { color: var(--ink); }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <h1>SmartDeal — Production Color Preview</h1>
+    <p>Review the proposed palette on real UI patterns. Toggle primary blue variants below. Nothing here is wired into the app yet.</p>
+  </header>
+
+  <div class="controls">
+    <button class="control-btn blue active" id="btn-blue" onclick="setMode('blue')">Primary: Bright Blue #2563EB</button>
+    <button class="control-btn navy" id="btn-navy" onclick="setMode('navy')">Primary: Navy #1E3A5F</button>
+    <button class="control-btn current" id="btn-compare" onclick="toggleCompare()">Toggle current vs proposed</button>
+  </div>
+
+  <main class="layout">
+    <!-- Palette -->
+    <section class="palette-section">
+      <h2>Proposed palette</h2>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-color" style="background:#FAFAFA"></div><div class="swatch-info"><strong>Base</strong><span>#FAFAFA</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#F7F7F5"></div><div class="swatch-info"><strong>Base alt</strong><span>#F7F7F5</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#1A1A1A"></div><div class="swatch-info"><strong>Ink</strong><span>#1A1A1A</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#2B2B2B"></div><div class="swatch-info"><strong>Ink secondary</strong><span>#2B2B2B</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#2563EB"></div><div class="swatch-info"><strong>Primary (bright)</strong><span>#2563EB</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#1E3A5F"></div><div class="swatch-info"><strong>Primary (navy)</strong><span>#1E3A5F</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#D4532A"></div><div class="swatch-info"><strong>CTA / accent</strong><span>#D4532A</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#E8823C"></div><div class="swatch-info"><strong>Warm highlight</strong><span>#E8823C</span></div></div>
+      </div>
+    </section>
+
+    <!-- Token usage guide -->
+    <section>
+      <h2 style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-muted);margin-bottom:0.75rem;">Where each color goes</h2>
+      <div class="usage-grid">
+        <div class="usage-card">
+          <h3>Surfaces</h3>
+          <div class="usage-row"><span class="usage-dot" style="background:#FAFAFA;border:1px solid #ddd"></span> Page background</div>
+          <div class="usage-row"><span class="usage-dot" style="background:#F7F7F5;border:1px solid #ddd"></span> Cards, elevated panels</div>
+        </div>
+        <div class="usage-card">
+          <h3>Typography</h3>
+          <div class="usage-row"><span class="usage-dot" style="background:#1A1A1A"></span> Headings, prices</div>
+          <div class="usage-row"><span class="usage-dot" style="background:#2B2B2B"></span> Body text</div>
+          <div class="usage-row"><span class="usage-dot" style="background:#6B6B6B"></span> Muted / captions</div>
+        </div>
+        <div class="usage-card">
+          <h3>Primary blue</h3>
+          <div class="usage-row"><span class="usage-dot" style="background:var(--active-primary)"></span> Hero gradients, links, trust</div>
+          <div class="usage-row"><span class="usage-dot" style="background:var(--active-primary)"></span> Section labels, focus rings</div>
+        </div>
+        <div class="usage-card">
+          <h3>Orange / amber</h3>
+          <div class="usage-row"><span class="usage-dot" style="background:#D4532A"></span> Primary CTAs, "View all"</div>
+          <div class="usage-row"><span class="usage-dot" style="background:#E8823C"></span> Deals highlight, savings badges</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Side by side -->
+    <section class="compare-section" id="compare-section">
+      <h2>Current vs proposed</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-label current">Current — warm beige</div>
+          <div class="mock-store current-theme" id="mock-current"></div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-label proposed" id="proposed-label">Proposed — clean premium</div>
+          <div class="mock-store proposed-theme" id="mock-proposed"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="note">
+      <strong>Recommendation:</strong> Bright blue (#2563EB) feels more modern and tech-forward — good for a marketplace positioning. Navy (#1E3A5F) reads more premium/banking — better if you want a "certified & secure" tone. Orange CTAs (#D4532A) work with both; keep them for buttons and urgency, not hero backgrounds. The warm beige neumorphic look shifts to a cooler, flatter premium aesthetic with subtler shadows.
+    </div>
+  </main>
+
+  <script>
+    const mockHTML = (theme) => `
+      <nav class="mock-nav">
+        <span class="mock-logo">SMARTDEAL</span>
+        <div class="mock-nav-links">
+          <a href="#">Smartphones</a>
+          <a href="#">Laptops</a>
+          <a href="#" class="deals">Deals</a>
+        </div>
+        <span style="font-size:1.1rem;color:var(--m-ink-muted)">🛒</span>
+      </nav>
+      <div class="mock-body">
+        <div class="mock-hero neu-raised">
+          <p class="mock-eyebrow">✦ Limited-time picks</p>
+          <h2>Certified gadgets. <em>Real savings.</em></h2>
+          <p>Phones, laptops & tablets — inspected, graded, and ready to ship.</p>
+          <div class="mock-hero-btns">
+            <button class="btn btn-ghost">Shop deals</button>
+            ${theme === 'proposed' ? '<button class="btn btn-outline">Browse catalog</button>' : ''}
+          </div>
+        </div>
+        <div class="mock-trust">
+          <div class="trust-item neu-raised-sm">
+            <div class="trust-icon" style="background:${theme === 'proposed' ? 'rgba(37,99,235,0.1);color:var(--m-primary)' : '#FFE8DC;color:#D4532A'}">✓</div>
+            40-Point Check
+          </div>
+          <div class="trust-item neu-raised-sm">
+            <div class="trust-icon" style="background:${theme === 'proposed' ? 'rgba(232,130,60,0.12);color:#E8823C' : '#FFF0D4;color:#C47A12'}">🛡</div>
+            6-Mo Warranty
+          </div>
+          <div class="trust-item neu-raised-sm">
+            <div class="trust-icon" style="background:${theme === 'proposed' ? 'rgba(37,99,235,0.08);color:var(--m-primary)' : '#FFE4E8;color:#C43A52'}">↺</div>
+            7-Day Replace
+          </div>
+          <div class="trust-item neu-raised-sm">
+            <div class="trust-icon" style="background:#E4F4EA;color:#3A8F5C">🏷</div>
+            Graded
+          </div>
+        </div>
+        <div class="mock-section-inner">
+          <p class="section-label">Hot right now</p>
+          <p class="section-title">Featured Deals</p>
+          <p class="section-sub">Fresh arrivals with transparent grading.</p>
+          <div class="mock-cards">
+            ${['iPhone 14', 'MacBook Air', 'iPad Pro', 'Galaxy S23'].map((name, i) => `
+              <div class="deal-card neu-raised-sm">
+                <div class="deal-img">📱</div>
+                <div class="deal-body">
+                  <p class="deal-brand">Apple / Samsung</p>
+                  <p class="deal-name">${name}</p>
+                  <p class="deal-price">₹${(42000 + i * 8000).toLocaleString('en-IN')} <s>₹${(52000 + i * 10000).toLocaleString('en-IN')}</s></p>
+                  <span class="deal-badge" style="background:${theme === 'proposed' ? 'rgba(232,130,60,0.15);color:#D4532A' : '#FFE8DC;color:#D4532A'}">Excellent</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="margin-top:1rem;display:flex;gap:0.6rem;flex-wrap:wrap">
+            <button class="btn btn-cta">Add to cart</button>
+            <button class="btn btn-primary" style="${theme === 'current' ? 'background:var(--m-accent)' : ''}">View details</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('mock-current').innerHTML = mockHTML('current');
+    document.getElementById('mock-proposed').innerHTML = mockHTML('proposed');
+
+    function setMode(mode) {
+      document.body.classList.toggle('navy-mode', mode === 'navy');
+      document.getElementById('btn-blue').classList.toggle('active', mode === 'blue');
+      document.getElementById('btn-navy').classList.toggle('active', mode === 'navy');
+      const label = document.getElementById('proposed-label');
+      label.textContent = mode === 'navy' ? 'Proposed — navy primary' : 'Proposed — bright blue primary';
+      label.style.background = mode === 'navy' ? '#1E3A5F' : '#2563EB';
+      document.getElementById('mock-proposed').innerHTML = mockHTML('proposed');
+    }
+
+    let compareVisible = true;
+    function toggleCompare() {
+      compareVisible = !compareVisible;
+      document.getElementById('compare-section').style.display = compareVisible ? '' : 'none';
+    }
+  </script>
+</body>
+</html>

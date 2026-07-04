@@ -17,17 +17,11 @@ interface UserState extends UserData {
 }
 
 const initialState: UserData = {
-    // userId: null,
-    // name: null,
-    // city: null,
-    // whatsappNumber: null,
-    // isVerified: false,
-
     userId: 'test-user-id',
     name: 'Test Reseller',
     city: 'Bangalore',
     whatsappNumber: '919876543210',
-    isVerified: true
+    isVerified: false
 }
 
 export const useUserStore = create<UserState>()(

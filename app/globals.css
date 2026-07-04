@@ -1,10 +1,30 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* SmartDeal warm soft-UI design tokens */
+  --color-surface: #F0E6D8;
+  --color-surface-light: #FFFAF4;
+  --color-surface-dark: #C8B8A4;
+  --color-ink: #2C2218;
+  --color-ink-muted: #6E5F4F;
+  --color-accent: #D4532A;
+  --color-accent-hover: #B8431F;
+  --color-accent-warm: #E8A317;
+  --color-success: #3A8F5C;
+  --color-strike: #A89482;
+  --radius-neu-sm: 12px;
+  --radius-neu: 20px;
+  --radius-neu-lg: 28px;
+
+  /* Neumorphic shadow channels (warm) */
+  --sd-shadow-dark: 200 184 164;
+  --sd-shadow-light: 255 250 244;
+
   --color-brand-blue: #2563EB;
   --color-brand-dark: #0F172A;
   --color-brand-indigo: #6366F1;
@@ -33,7 +53,6 @@
   --color-border: var(--border);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -127,9 +146,90 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
-  html {
-    @apply font-sans;
+}
+
+/* -----------------------------------------------------------------------------
+   SmartDeal soft-UI (neumorphic) shadow utilities (required)
+   NOTE: Tailwind doesn't express dual-shadow pairs cleanly, so these are CSS.
+----------------------------------------------------------------------------- */
+
+@layer utilities {
+  .neu-raised {
+    box-shadow:
+      8px 8px 18px rgb(var(--sd-shadow-dark) / 0.45),
+      -6px -6px 16px rgb(var(--sd-shadow-light) / 0.2);
+  }
+
+  .neu-raised-sm {
+    box-shadow:
+      4px 4px 10px rgb(var(--sd-shadow-dark) / 0.35),
+      -3px -3px 8px rgb(var(--sd-shadow-light) / 0.85);
+  }
+
+  .neu-inset {
+    box-shadow:
+      inset 4px 4px 10px rgb(var(--sd-shadow-dark) / 0.4),
+      inset -4px -4px 10px rgb(var(--sd-shadow-light) / 0.9);
+  }
+
+  .neu-hover-lift {
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .neu-hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      10px 10px 22px rgb(var(--sd-shadow-dark) / 0.5),
+      -7px -7px 18px rgb(var(--sd-shadow-light) / 0.2);
+  }
+
+  /* scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #F3ECE3;
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #D4532A;
+  border-radius: 999px;
+  border: 2px solid #F3ECE3;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #C94E24;
+}
+
+  @media (prefers-reduced-motion: reduce) {
+    .neu-hover-lift {
+      transition: box-shadow 0.25s ease;
+    }
+    .neu-hover-lift:hover {
+      transform: none;
+    }
+  }
+
+  @keyframes glint-shine {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(220%);
+    }
+  }
+
+  .glint-shine {
+    animation: glint-shine 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glint-shine {
+      animation: none;
+    }
   }
 }

@@ -52,7 +52,7 @@ export default function CartPage() {
         getEligibleCoupons(totalPrice).then(setEligibleCoupons).catch(() => { })
     }, [totalPrice, items.length])
 
-    // Re-validate applied coupon if cart total changes (it may no longer be eligible)
+    // Re-validate applied coupon if cart total changes
     useEffect(() => {
         if (!appliedCoupon) return
         if (totalPrice < appliedCoupon.min_cart_value) {
@@ -147,15 +147,15 @@ export default function CartPage() {
 
     if (items.length === 0) {
         return (
-            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 text-center">
+            <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 text-center">
                 <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                    <ShoppingCart className="w-7 h-7 text-gray-400" />
+                    <ShoppingCart className="w-7 h-7 text-accent" />
                 </div>
                 <p className="text-gray-700 font-semibold text-lg">Your cart is empty</p>
                 <p className="text-gray-400 text-sm mt-1 mb-5">Browse listings and add items to get started</p>
                 <Link
                     href="/"
-                    className="inline-flex items-center gap-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-medium rounded-xl px-5 py-2.5 transition-colors text-sm"
+                    className="inline-flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-white font-medium rounded-xl px-5 py-2.5 transition-colors text-sm"
                 >
                     <ChevronLeft className="w-4 h-4" />
                     Browse listings
@@ -165,7 +165,7 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-surface bg-gray-50">
             <div className="max-w-3xl mx-auto px-4 py-6">
 
                 {/* Header */}
@@ -215,15 +215,15 @@ export default function CartPage() {
                             </div>
                             <div className="flex flex-col items-end gap-2 shrink-0">
                                 <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-1">
-                                    <button onClick={() => decrement(item.variant_id, item.quantity)} className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-[#2563EB] transition-colors">
+                                    <button onClick={() => decrement(item.variant_id, item.quantity)} className="w-7 h-7 flex cursor-pointer items-center justify-center text-gray-500 hover:text-accent-hover transition-colors">
                                         <Minus className="w-3.5 h-3.5" />
                                     </button>
                                     <span className="text-sm font-semibold text-gray-900 w-6 text-center">{item.quantity}</span>
-                                    <button onClick={() => updateQuantity(item.variant_id, item.quantity + 1)} className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-[#2563EB] transition-colors">
+                                    <button onClick={() => updateQuantity(item.variant_id, item.quantity + 1)} className="w-7 h-7 flex cursor-pointer items-center justify-center text-gray-500 hover:text-accent-hover transition-colors">
                                         <Plus className="w-3.5 h-3.5" />
                                     </button>
                                 </div>
-                                <button onClick={() => removeItem(item.variant_id)} className="text-gray-400 hover:text-red-500 transition-colors">
+                                <button onClick={() => removeItem(item.variant_id)} className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors">
                                     <Trash2 className="w-4 h-4" />
                                 </button>
                             </div>
@@ -234,7 +234,7 @@ export default function CartPage() {
                 {/* ── Coupon Section ── */}
                 <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-4">
                     <p className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
-                        <Tag className="w-4 h-4 text-[#2563EB]" />
+                        <Tag className="w-4 h-4 text-accent" />
                         Have a coupon?
                     </p>
 
@@ -292,12 +292,12 @@ export default function CartPage() {
                                 onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError('') }}
                                 onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
                                 placeholder="Enter coupon code"
-                                className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono uppercase placeholder:normal-case placeholder:font-sans placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]"
+                                className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono uppercase placeholder:normal-case placeholder:font-sans placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent-hover"
                             />
                             <button
                                 onClick={handleApplyCoupon}
                                 disabled={couponPending || !couponInput.trim()}
-                                className="bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl px-4 py-2.5 transition-colors"
+                                className="bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl px-4 py-2.5 transition-colors"
                             >
                                 {couponPending ? 'Applying…' : 'Apply'}
                             </button>

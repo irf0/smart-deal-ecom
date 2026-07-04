@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MessageCircle, MapPin } from 'lucide-react'
+import { MessageCircle, MapPin, ShieldCheck, RotateCcw, HelpCircle } from 'lucide-react'
 
 export default function Footer() {
     const whatsapp = process.env.NEXT_PUBLIC_SHOP_WHATSAPP ?? '#'
@@ -8,49 +8,82 @@ export default function Footer() {
 
     return (
         <>
-            <footer className="bg-[#0F172A] text-white/70 mt-16">
-                <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <footer className="mt-14 border-t border-black/5 bg-[#E8DDD0] text-ink">
+                {/* Footer (flat, no shadows) */}
+                <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
 
                     <div>
-                        <h3 className="text-white font-bold text-lg mb-2">
-                            Smart<span className="text-[#2563EB]">Deal</span>
+                        <h3 className="text-ink font-bold text-lg tracking-tight">
+                            Smart<span className="text-accent">Deal</span>
                         </h3>
-                        <p className="text-sm leading-relaxed">
-                            Certified second hand gadgets at the best prices. Every device tested and verified.
+                        <p className="mt-2 text-sm text-ink-muted leading-relaxed">
+                            SmartDeal is a trust-first marketplace for certified second-hand phones, laptops, tablets and accessories.
+                            Every listing is inspected, graded, and backed by warranty.
                         </p>
                     </div>
 
                     <div>
-                        <h4 className="text-white font-semibold mb-3">Quick Links</h4>
-                        <ul className="space-y-2 text-sm">
-                            <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-                            <li><Link href="/cart" className="hover:text-white transition-colors">Cart</Link></li>
+                        <h4 className="text-ink font-semibold mb-3">Shop</h4>
+                        <ul className="space-y-2 text-sm text-ink-muted">
+                            <li><Link href="/" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">Home</Link></li>
+                            <li><Link href="/product" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">All products</Link></li>
+                            <li><Link href="/cart" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">Cart</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h4 className="text-white font-semibold mb-3">Contact</h4>
-                        <ul className="space-y-2 text-sm">
+                        <h4 className="text-ink font-semibold mb-3">Support</h4>
+                        <ul className="space-y-2 text-sm text-ink-muted">
                             <li className="flex items-center gap-2">
-                                <MessageCircle size={14} className="text-[#25D366]" />
+                                <ShieldCheck size={14} className="text-accent" aria-hidden="true" />
+                                <a href="/warranty" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">
+                                    Warranty
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <RotateCcw size={14} className="text-accent" aria-hidden="true" />
+                                <a href="/returns" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">
+                                    Returns
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <HelpCircle size={14} className="text-accent" aria-hidden="true" />
+                                <a href="/faq" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">
+                                    FAQ
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <MessageCircle size={14} className="text-accent" aria-hidden="true" />
+                                <a href="/contact" className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex">
+                                    Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="text-ink font-semibold mb-3">Get in touch</h4>
+                        <ul className="space-y-2 text-sm text-ink-muted">
+                            <li className="flex items-center gap-2">
+                                <MessageCircle size={14} className="text-success" aria-hidden="true" />
                                 <a
                                     href={`https://wa.me/${whatsapp}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="hover:text-white transition-colors"
+                                    className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
                                 >
                                     {whatsapp}
                                 </a>
                             </li>
                             <li className="flex items-center gap-2">
-                                <MapPin size={14} className="text-brand-blue" />
+                                <MapPin size={14} className="text-accent" aria-hidden="true" />
                                 <span>{location}</span>
                             </li>
                         </ul>
                     </div>
 
                 </div>
-                <div className="border-t border-white/10 text-center py-4 text-xs text-white/40">
+                <div className="border-t border-black/5 text-center py-4 text-xs text-ink-muted">
                     © {new Date().getFullYear()} {shopName}. All rights reserved.
                 </div>
             </footer>

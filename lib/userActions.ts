@@ -1,18 +1,21 @@
-import { createClient } from '@/lib/supabase/client'
-
 interface UpsertUserParams {
     name: string
     city: string
     whatsappNumber: string
 }
 
-export async function upsertUser({ name, city, whatsappNumber }: UpsertUserParams) {
-    const supabase = createClient()
-
+export async function upsertUser(
+    supabase: any,
+    { name, city, whatsappNumber }: UpsertUserParams
+) {
     const { data, error } = await supabase
         .from('users')
         .upsert(
-            { name, city, whatsapp_number: whatsappNumber },
+            {
+                name,
+                city,
+                whatsapp_number: whatsappNumber,
+            },
             { onConflict: 'whatsapp_number' }
         )
         .select('id')

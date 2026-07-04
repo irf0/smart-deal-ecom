@@ -14,7 +14,7 @@ export default function StoreLayout({
     children: React.ReactNode
 }) {
     return (
-        <div className="min-h-screen flex flex-col bg-brand-silver">
+        <div className="min-h-screen flex flex-col bg-surface text-ink">
             <Navbar />
 
             <main className="flex-1">

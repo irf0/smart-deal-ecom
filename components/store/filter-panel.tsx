@@ -14,10 +14,16 @@ import type { filterParsers } from '@/lib/store/filter-parsers'
 type FilterState = ReturnType<typeof useQueryStates<typeof filterParsers>>[0]
 type FilterSetters = ReturnType<typeof useQueryStates<typeof filterParsers>>[1]
 
-// ─── FilterSection ────────────────────────────────────────────────────────────
+function chipClass(active: boolean) {
+    return `px-2.5 py-1 rounded-full text-xs font-medium border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${active
+        ? 'bg-accent text-white border-accent'
+        : 'bg-surface text-gray-600 border-gray-300 hover:border-accent-hover hover:text-accent'
+        }`
+}
 
 function FilterSection({ title, children }: { title: string; children: ReactNode }) {
     const [open, setOpen] = useState(true)
+
     return (
         <div className="border-b border-gray-100 last:border-0 py-3">
             <button
@@ -34,8 +40,6 @@ function FilterSection({ title, children }: { title: string; children: ReactNode
         </div>
     )
 }
-
-// ─── StringChips / NumberChips ────────────────────────────────────────────────
 
 function StringChips({
     options,
@@ -54,6 +58,7 @@ function StringChips({
         if (disabled) return
         onChange(selected.includes(opt) ? selected.filter(x => x !== opt) : [...selected, opt])
     }
+
     return (
         <div className="flex flex-wrap gap-1.5">
             {options.map(opt => (
@@ -61,11 +66,7 @@ function StringChips({
                     key={opt}
                     onClick={() => toggle(opt)}
                     disabled={disabled}
-                    className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors disabled:opacity-40 disabled:cursor-not-allowed
-                        ${selected.includes(opt)
-                            ? 'bg-[#2563EB] text-white border-[#2563EB]'
-                            : 'bg-white text-gray-600 border-gray-300 hover:border-[#2563EB] hover:text-[#2563EB]'
-                        }`}
+                    className={chipClass(selected.includes(opt))}
                 >
                     {labels?.[opt] ?? opt}
                 </button>
@@ -91,6 +92,7 @@ function NumberChips({
         if (disabled) return
         onChange(selected.includes(opt) ? selected.filter(x => x !== opt) : [...selected, opt])
     }
+
     return (
         <div className="flex flex-wrap gap-1.5">
             {options.map(opt => (
@@ -98,11 +100,7 @@ function NumberChips({
                     key={opt}
                     onClick={() => toggle(opt)}
                     disabled={disabled}
-                    className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors disabled:opacity-40 disabled:cursor-not-allowed
-                        ${selected.includes(opt)
-                            ? 'bg-[#2563EB] text-white border-[#2563EB]'
-                            : 'bg-white text-gray-600 border-gray-300 hover:border-[#2563EB] hover:text-[#2563EB]'
-                        }`}
+                    className={chipClass(selected.includes(opt))}
                 >
                     {opt >= 1024 ? `${opt / 1024}TB` : `${opt}${unit}`}
                 </button>
@@ -110,8 +108,6 @@ function NumberChips({
         </div>
     )
 }
-
-// ─── FilterPanel ──────────────────────────────────────────────────────────────
 
 export function FilterPanel({
     state,
@@ -133,35 +129,44 @@ export function FilterPanel({
 
     function clearAll() {
         set({
-            conditions: [], brands: [], rams: [], storages: [],
-            networks: [], os: [], colors: [], minPrice: '', maxPrice: '',
-            sort: 'newest', category: 'All', q: '',
+            conditions: [],
+            brands: [],
+            rams: [],
+            storages: [],
+            networks: [],
+            os: [],
+            colors: [],
+            minPrice: '',
+            maxPrice: '',
+            sort: 'newest',
+            category: 'All',
+            q: '',
         })
     }
 
     return (
         <div className="flex flex-col h-full">
-
-            {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="font-semibold text-gray-900 text-sm">Filters</span>
                     {activeCount > 0 && (
-                        <span className="bg-[#2563EB] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                        <span className="bg-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                             {activeCount}
                         </span>
                     )}
                 </div>
+
                 <div className="flex items-center gap-3">
                     {activeCount > 0 && (
                         <button
                             onClick={clearAll}
                             disabled={disabled}
-                            className="text-xs text-[#2563EB] font-medium disabled:opacity-40"
+                            className="text-xs text-accent font-medium hover:underline disabled:opacity-40"
                         >
                             Clear all
                         </button>
                     )}
+
                     {isMobile && onClose && (
                         <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100">
                             <X className="w-4 h-4 text-gray-500" />
@@ -170,20 +175,17 @@ export function FilterPanel({
                 </div>
             </div>
 
-            {/* Scrollable body */}
-            <div className="flex-1 overflow-y-auto px-4">
-
+            <div className="flex-1 overflow-y-auto px-4 custom-scrollbar">
                 <FilterSection title="Sort by">
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-1">
                         {SORT_OPTIONS.map(opt => (
                             <button
                                 key={opt.value}
                                 onClick={() => !disabled && set({ sort: opt.value })}
                                 disabled={disabled}
-                                className={`text-left text-xs px-2.5 py-2 rounded-lg transition-colors font-medium disabled:opacity-40
-                                    ${state.sort === opt.value
-                                        ? 'bg-[#2563EB]/10 text-[#2563EB]'
-                                        : 'text-gray-600 hover:bg-gray-50'
+                                className={`text-left text-xs px-3 py-2 rounded-xl transition-colors font-medium disabled:opacity-40 ${state.sort === opt.value
+                                    ? 'bg-accent text-white border-accent'
+                                    : 'bg-surface text-gray-600 border-gray-300 hover:border-accent-hover hover:text-accent'
                                     }`}
                             >
                                 {opt.label}
@@ -201,7 +203,7 @@ export function FilterPanel({
                             value={state.minPrice}
                             onChange={e => set({ minPrice: e.target.value })}
                             disabled={disabled}
-                            className="h-8 text-xs rounded-lg border-gray-300 bg-gray-50 text-gray-900 placeholder:text-gray-400 disabled:opacity-40"
+                            className="h-8 text-xs rounded-lg border-gray-300 bg-gray-50 text-gray-900 placeholder:text-gray-400 focus-visible:ring-accent focus-visible:border-accent disabled:opacity-40"
                         />
                         <span className="text-gray-400 text-xs shrink-0">—</span>
                         <Input
@@ -211,22 +213,17 @@ export function FilterPanel({
                             value={state.maxPrice}
                             onChange={e => set({ maxPrice: e.target.value })}
                             disabled={disabled}
-                            className="h-8 text-xs rounded-lg border-gray-300 bg-gray-50 text-gray-900 placeholder:text-gray-400 disabled:opacity-40"
+                            className="h-8 text-xs rounded-lg border-gray-300 bg-gray-50 text-gray-900 placeholder:text-gray-400 focus-visible:ring-accent focus-visible:border-accent disabled:opacity-40"
                         />
                     </div>
+
                     {state.minPrice && state.maxPrice && Number(state.minPrice) > Number(state.maxPrice) && (
                         <p className="text-red-500 text-[10px] mt-1.5">Min price can't exceed max price</p>
                     )}
                 </FilterSection>
 
                 <FilterSection title="Condition">
-                    <StringChips
-                        options={[...CONDITIONS]}
-                        labels={CONDITION_LABELS}
-                        selected={state.conditions}
-                        onChange={v => set({ conditions: v })}
-                        disabled={disabled}
-                    />
+                    <StringChips options={[...CONDITIONS]} labels={CONDITION_LABELS} selected={state.conditions} onChange={v => set({ conditions: v })} disabled={disabled} />
                 </FilterSection>
 
                 <FilterSection title="Brand">
@@ -252,15 +249,13 @@ export function FilterPanel({
                 <FilterSection title="Color">
                     <StringChips options={COLORS} selected={state.colors} onChange={v => set({ colors: v })} disabled={disabled} />
                 </FilterSection>
-
             </div>
 
-            {/* Mobile apply button */}
             {isMobile && onClose && (
                 <div className="px-4 py-3 border-t border-gray-200 shrink-0">
                     <Button
                         onClick={onClose}
-                        className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl h-11"
+                        className="w-full bg-accent hover:bg-accent-hover text-white rounded-xl h-11"
                     >
                         Show results
                     </Button>

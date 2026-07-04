@@ -135,7 +135,7 @@ export function ProductCard({ product }: { product: StorefrontProduct }) {
             <div className="px-3 pb-3">
                 <button
                     onClick={handleAddToCart}
-                    className="w-full flex items-center justify-center gap-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-medium rounded-xl py-2 transition-colors duration-200 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-1.5 bg-accent hover:bg-accent-hover text-white text-xs font-medium rounded-xl py-2 transition-colors duration-200 cursor-pointer"
                 >
                     Add To Cart
                 </button>
