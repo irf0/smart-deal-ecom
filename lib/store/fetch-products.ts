@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/client'
 import type { StorefrontProduct } from '@/lib/types/'
 
+
 export async function fetchProducts(): Promise<StorefrontProduct[]> {
     const supabase = createClient()
 
@@ -39,7 +40,7 @@ export async function fetchProducts(): Promise<StorefrontProduct[]> {
     if (error) throw new Error(error.message)
     if (!data) return []
 
-    return data.map(variant => {
+    return data.map((variant: any) => {
         const product = variant.products as any
         const images: { url: string; position: number }[] = product.product_images ?? []
         const firstImage = images.sort((a, b) => a.position - b.position)[0] ?? null
