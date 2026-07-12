@@ -10,20 +10,17 @@ import {
   FaFacebook,
   FaInstagram,
   FaYoutube,
-  FaXTwitter,
   FaWhatsapp,
 } from "react-icons/fa6";
 
 export default function Footer() {
-  const whatsapp = process.env.NEXT_PUBLIC_SHOP_WHATSAPP ?? "#";
+  const whatsapp = process.env.NEXT_PUBLIC_SHOP_WHATSAPP ?? "9876543210";
   const location = process.env.NEXT_PUBLIC_SHOP_LOCATION ?? "Assam, India";
   const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Smart Deal";
 
-  const maps = process.env.NEXT_PUBLIC_GOOGLE_MAPS;
   const facebook = process.env.NEXT_PUBLIC_FACEBOOK;
   const instagram = process.env.NEXT_PUBLIC_INSTAGRAM;
   const youtube = process.env.NEXT_PUBLIC_YOUTUBE;
-  const twitter = process.env.NEXT_PUBLIC_X;
 
   return (
     <footer className="mt-14 border-t border-black/5 bg-[#E8DDD0] text-ink">
@@ -41,40 +38,6 @@ export default function Footer() {
             inspected, graded, and backed by warranty.
           </p>
         </div>
-
-        {/* Shop
-        <div>
-          <h4 className="text-ink font-semibold mb-3">Shop</h4>
-
-          <ul className="space-y-2 text-sm text-ink-muted">
-            <li>
-              <Link
-                href="/"
-                className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
-              >
-                Home
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/product"
-                className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
-              >
-                All Products
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/cart"
-                className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
-              >
-                Cart
-              </Link>
-            </li>
-          </ul>
-        </div> */}
 
         <div>
           <h4 className="text-ink font-semibold mb-3">Follow Us</h4>
@@ -132,7 +95,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <ShieldCheck size={14} className="text-accent" />
               <Link
-                href="/warranty"
+                href="/"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 Warranty
@@ -142,7 +105,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <RotateCcw size={14} className="text-accent" />
               <Link
-                href="/returns"
+                href="/"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 Returns
@@ -152,7 +115,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <HelpCircle size={14} className="text-accent" />
               <Link
-                href="/faq"
+                href="/"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 FAQ
@@ -162,7 +125,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <MessageCircle size={14} className="text-accent" />
               <Link
-                href="/contact"
+                href="/"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 Contact
@@ -190,19 +153,13 @@ export default function Footer() {
               </a>
             </li>
 
-            {/* Google Maps */}
-            {maps && (
+            {location && (
               <li className="flex items-center gap-2">
                 <MapPin size={16} className="text-accent" />
 
-                <a
-                  href={maps}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors"
-                >
+                <span className="hover:text-ink transition-colors">
                   {location}
-                </a>
+                </span>
               </li>
             )}
 

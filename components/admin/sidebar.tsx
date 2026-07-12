@@ -12,6 +12,7 @@ import {
   BadgeDollarSign,
   Shapes,
   Copyright,
+  Settings,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -25,6 +26,7 @@ const links = [
     icon: BadgeDollarSign,
   },
   { href: "/admin/coupon", label: "Coupons", icon: Tag },
+  { href: "/admin/carousel", label: "Banner Settings", icon: Settings },
   // {
   //   href: "/admin/brands",
   //   label: "Brand Logo Upload",
