@@ -1,23 +1,24 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { ShoppingCart, Menu, X } from 'lucide-react'
-import { useCartStore } from '@/store/cartStore'
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { ShoppingCart, Menu, X } from "lucide-react";
+import { useCartStore } from "@/store/cartStore";
 
 const NAV_LINKS = [
-  { label: 'Smartphones', href: '/product?category=Phones' },
-  { label: 'Laptops', href: '/product?category=Laptops' },
-  { label: 'Tablets', href: '/product?category=Tablets' },
-  { label: 'Accessories', href: '/product?category=Accessories' },
-] as const
+  { label: "Smartphones", href: "/product?category=Phones" },
+  { label: "Laptops", href: "/product?category=Laptops" },
+  { label: "Tablets", href: "/product?category=Tablets" },
+  { label: "Accessories", href: "/product?category=Accessories" },
+  { label: "Sell/Exchange", href: "/sell" },
+] as const;
 
 function GlintDealsLink({
-  className = '',
+  className = "",
   onClick,
 }: {
-  className?: string
-  onClick?: () => void
+  className?: string;
+  onClick?: () => void;
 }) {
   return (
     <Link
@@ -32,12 +33,12 @@ function GlintDealsLink({
           className="pointer-events-none absolute inset-y-0 left-0 w-1/2 glint-shine"
           style={{
             background:
-              'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 35%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.15) 65%, transparent 100%)',
+              "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 35%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.15) 65%, transparent 100%)",
           }}
         />
       </span>
     </Link>
-  )
+  );
 }
 
 function NavLink({
@@ -45,9 +46,9 @@ function NavLink({
   label,
   onClick,
 }: {
-  href: string
-  label: string
-  onClick?: () => void
+  href: string;
+  label: string;
+  onClick?: () => void;
 }) {
   return (
     <Link
@@ -57,14 +58,14 @@ function NavLink({
     >
       {label}
     </Link>
-  )
+  );
 }
 
 function CartButton() {
-  const [mounted, setMounted] = useState(false)
-  const itemCount = useCartStore((state) => state.totalItems())
+  const [mounted, setMounted] = useState(false);
+  const itemCount = useCartStore((state) => state.totalItems());
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => setMounted(true), []);
 
   return (
     <Link
@@ -79,13 +80,13 @@ function CartButton() {
         </span>
       )}
     </Link>
-  )
+  );
 }
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const closeMobile = () => setMobileOpen(false)
+  const closeMobile = () => setMobileOpen(false);
 
   return (
     <header className="sticky top-0 z-50 w-full h-16 bg-surface backdrop-blur-md">
@@ -117,7 +118,7 @@ export default function Navbar() {
             className="md:hidden p-2 text-ink hover:text-accent rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-muted/50 focus-visible:ring-offset-2"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -146,5 +147,5 @@ export default function Navbar() {
         </nav>
       )}
     </header>
-  )
+  );
 }
