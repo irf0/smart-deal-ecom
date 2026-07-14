@@ -139,7 +139,6 @@ export default function Footer() {
           <h4 className="text-ink font-semibold mb-3">Get in touch</h4>
 
           <ul className="space-y-3 text-sm text-ink-muted">
-            {/* WhatsApp */}
             <li className="flex items-center gap-2">
               <FaWhatsapp size={16} className="text-green-600" />
 
@@ -156,7 +155,6 @@ export default function Footer() {
             {location && (
               <li className="flex items-center gap-2">
                 <MapPin size={16} className="text-accent" />
-
                 <span className="hover:text-ink transition-colors">
                   {location}
                 </span>
