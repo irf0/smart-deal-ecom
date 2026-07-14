@@ -24,7 +24,6 @@ export default function Footer() {
 
   return (
     <footer className="mt-14 border-t border-black/5 bg-[#E8DDD0] text-ink">
-      {/* Footer */}
       <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Brand */}
         <div>
