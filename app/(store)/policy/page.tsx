@@ -176,13 +176,17 @@ function Block({ block }: { block: PolicyBlock }) {
       return (
         <div className="bg-white border border-[#E5DDD0] rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#FBF7F1]">
-                  {block.content.columns.map((column) => (
+                  {block.content.columns.map((column, colIndex) => (
                     <th
                       key={column}
-                      className="text-left font-medium text-[#2B2620] p-3 border-b border-[#E5DDD0] whitespace-nowrap"
+                      className={`text-left font-medium text-[#2B2620] p-3 border-b border-[#E5DDD0] whitespace-nowrap ${
+                        colIndex < block.content.columns.length - 1
+                          ? "border-r"
+                          : ""
+                      }`}
                     >
                       {column}
                     </th>
@@ -191,21 +195,26 @@ function Block({ block }: { block: PolicyBlock }) {
               </thead>
 
               <tbody>
-                {block.content.rows.map((row, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className={rowIndex % 2 ? "bg-[#FBF7F1]/40" : ""}
-                  >
-                    {row.map((cell, cellIndex) => (
-                      <td
-                        key={cellIndex}
-                        className="p-3 align-top text-[#2B2620] border-b border-[#E5DDD0] last:border-b-0"
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {block.content.rows.map((row, rowIndex) => {
+                  const isLastRow = rowIndex === block.content.rows.length - 1;
+                  return (
+                    <tr
+                      key={rowIndex}
+                      className={rowIndex % 2 ? "bg-[#FBF7F1]/40" : ""}
+                    >
+                      {row.map((cell, cellIndex) => (
+                        <td
+                          key={cellIndex}
+                          className={`p-3 align-top text-[#2B2620] border-[#E5DDD0] ${
+                            isLastRow ? "" : "border-b"
+                          } ${cellIndex < row.length - 1 ? "border-r" : ""}`}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
