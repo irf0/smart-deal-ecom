@@ -1,7 +1,9 @@
-export const dynamic = "force-dynamic";
+import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import SellRequestStatus from "@/components/admin/sell-request-status";
 import RefreshButton from "@/components/admin/refresh-button";
+
+export const dynamic = "force-dynamic";
 
 export default async function SellRequestsPage() {
   const { data: requests } = await supabaseAdmin
@@ -57,8 +59,13 @@ export default async function SellRequestsPage() {
           </thead>
           <tbody className="divide-y">
             {requests?.map((r) => (
-              <tr key={r.id} className="hover:bg-gray-50">
+              <tr key={r.id} className="hover:bg-gray-50 relative">
                 <td className="px-4 py-3">
+                  <Link
+                    href={`/admin/sell-requests/${r.id}`}
+                    className="absolute inset-0"
+                    aria-label={`View details for ${r.brand} ${r.model}`}
+                  />
                   <p className="font-medium">
                     {r.brand} {r.model}
                   </p>
@@ -103,17 +110,11 @@ export default async function SellRequestsPage() {
                       {r.image_urls
                         .slice(0, 3)
                         .map((url: string, i: number) => (
-                          <a
+                          <img
                             key={i}
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img
-                              src={url}
-                              className="w-8 h-8 object-cover rounded border"
-                            />
-                          </a>
+                            src={url}
+                            className="w-8 h-8 object-cover rounded border relative z-10"
+                          />
                         ))}
                     </div>
                   ) : (
@@ -121,7 +122,7 @@ export default async function SellRequestsPage() {
                   )}
                 </td>
 
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 relative z-10">
                   <SellRequestStatus id={r.id} status={r.status} />
                 </td>
 
@@ -152,7 +153,11 @@ export default async function SellRequestsPage() {
       {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
         {requests?.map((r) => (
-          <div key={r.id} className="bg-white border rounded-lg p-4 space-y-3">
+          <Link
+            href={`/admin/sell-requests/${r.id}`}
+            key={r.id}
+            className="block bg-white border rounded-lg p-4 space-y-3"
+          >
             <div className="flex justify-between items-start gap-3">
               <div>
                 <h2 className="font-semibold">
@@ -172,7 +177,9 @@ export default async function SellRequestsPage() {
                 )}
               </div>
 
-              <SellRequestStatus id={r.id} status={r.status} />
+              <div onClick={(e) => e.preventDefault()}>
+                <SellRequestStatus id={r.id} status={r.status} />
+              </div>
             </div>
 
             <div>
@@ -210,21 +217,15 @@ export default async function SellRequestsPage() {
             {r.image_urls?.length > 0 && (
               <div className="flex gap-2">
                 {r.image_urls.slice(0, 3).map((url: string, i: number) => (
-                  <a
+                  <img
                     key={i}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={url}
-                      className="w-14 h-14 object-cover rounded border"
-                    />
-                  </a>
+                    src={url}
+                    className="w-14 h-14 object-cover rounded border"
+                  />
                 ))}
               </div>
             )}
-          </div>
+          </Link>
         ))}
 
         {!requests?.length && (
