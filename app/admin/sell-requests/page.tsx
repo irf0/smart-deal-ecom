@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import SellRequestStatus from "@/components/admin/sell-request-status";
 import RefreshButton from "@/components/admin/refresh-button";
