@@ -21,8 +21,8 @@ type SaveProductInput = {
   slug?: string;
   productData: {
     category_id: string;
-    brand: string;
-    model: string;
+    brand_id: string;
+    model_id: string;
     description: string | null;
     specs: string | null;
     ram_gb: number | null;
@@ -38,18 +38,42 @@ type SaveProductInput = {
 export async function saveProduct(input: SaveProductInput) {
   await requireAdmin();
 
+  const { brand_id, model_id } = input.productData;
+  if (!brand_id) throw new Error("Brand is required");
+  if (!model_id) throw new Error("Model is required");
+
+  // Look up brand/model names server-side — never trust client-sent text.
+  // This keeps the legacy `brand`/`model` text columns (still read by the
+  // storefront) automatically in sync with the selected brand/model.
+  const [
+    { data: brandRow, error: brandErr },
+    { data: modelRow, error: modelErr },
+  ] = await Promise.all([
+    supabaseAdmin.from("brands").select("name").eq("id", brand_id).single(),
+    supabaseAdmin.from("models").select("name").eq("id", model_id).single(),
+  ]);
+
+  if (brandErr || !brandRow) throw new Error("Selected brand not found");
+  if (modelErr || !modelRow) throw new Error("Selected model not found");
+
+  const dataToSave = {
+    ...input.productData,
+    brand: brandRow.name,
+    model: modelRow.name,
+  };
+
   let productId = input.productId;
 
   if (productId) {
     const { error } = await supabaseAdmin
       .from("products")
-      .update(input.productData)
+      .update(dataToSave)
       .eq("id", productId);
     if (error) throw new Error(error.message);
   } else {
     const { data, error } = await supabaseAdmin
       .from("products")
-      .insert({ ...input.productData, slug: input.slug })
+      .insert({ ...dataToSave, slug: input.slug })
       .select()
       .single();
     if (error) throw new Error(error.message);

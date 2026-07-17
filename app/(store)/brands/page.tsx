@@ -1,42 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getBrands } from "@/app/(store)/brands/actions";
+import { getBrands } from "./actions";
 
-export default async function ShopByBrand() {
+export default async function BrandsPage() {
   const brands = await getBrands();
 
-  if (!brands.length) return null;
-
-  const featuredBrands = brands.slice(0, 12);
-
   return (
-    <section className="mx-auto max-w-6xl px-6 py-12">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-4xl font-bold text-gray-900">Shop by Brand</h2>
-
-        <Link
-          href="/brands"
-          className="text-sm font-semibold text-orange-600 transition-colors hover:text-orange-700"
-        >
-          See All →
-        </Link>
+    <main className="mx-auto max-w-7xl px-6 py-12">
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold text-gray-900">Shop by Brand</h1>
+        <p className="mt-2 text-gray-600">Browse all available brands.</p>
       </div>
 
-      <div
-        className="
-          flex
-          gap-5
-          overflow-x-auto
-          pb-2
-          snap-x
-          snap-mandatory
-          whitespace-nowrap
-          [-ms-overflow-style:none]
-          [scrollbar-width:none]
-          [&::-webkit-scrollbar]:hidden
-        "
-      >
-        {featuredBrands.map((brand) => {
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        {brands.map((brand) => {
           const params = new URLSearchParams();
           params.append("brands", brand.name);
 
@@ -50,11 +27,8 @@ export default async function ShopByBrand() {
                 color: brand.text_color,
               }}
               className="
-                snap-start
-                shrink-0
                 flex
-                h-16
-                w-48
+                h-24
                 items-center
                 justify-center
                 rounded-2xl
@@ -71,10 +45,10 @@ export default async function ShopByBrand() {
                 <Image
                   src={brand.logo_url}
                   alt={brand.name}
-                  width={100}
-                  height={40}
+                  width={120}
+                  height={48}
                   unoptimized
-                  className="max-h-10 w-auto object-contain"
+                  className="max-h-12 w-auto object-contain"
                 />
               ) : (
                 brand.name
@@ -83,6 +57,6 @@ export default async function ShopByBrand() {
           );
         })}
       </div>
-    </section>
+    </main>
   );
 }

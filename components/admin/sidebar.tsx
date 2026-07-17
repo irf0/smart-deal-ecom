@@ -10,9 +10,8 @@ import {
   LogOut,
   X,
   BadgeDollarSign,
-  Shapes,
-  Copyright,
-  Settings,
+  Clapperboard,
+  Palette,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -26,12 +25,12 @@ const links = [
     icon: BadgeDollarSign,
   },
   { href: "/admin/coupon", label: "Coupons", icon: Tag },
-  { href: "/admin/carousel", label: "Banner Settings", icon: Settings },
-  // {
-  //   href: "/admin/brands",
-  //   label: "Brand Logo Upload",
-  //   icon: Copyright, // temporary
-  // },
+  { href: "/admin/carousel", label: "Banner Settings", icon: Clapperboard },
+  {
+    href: "/admin/brandlogos",
+    label: "Brand Logos Settings",
+    icon: Palette,
+  },
 ];
 
 export default function Sidebar({

@@ -22,6 +22,10 @@ import {
   saveProduct,
   deleteProductImage,
 } from "@/app/admin/products/save-action";
+import BrandModelSelect, {
+  type BrandModelValue,
+} from "@/components/admin/brand-model-select";
+import type { Brand } from "@/app/admin/products/brand-model-actions";
 
 type VariantRow = {
   id?: string;
@@ -40,11 +44,14 @@ type VariantRow = {
 
 type ProductFormProps = {
   categories: Category[];
+  brands: Brand[];
   product?: {
     id: string;
     slug: string;
     category_id: string;
+    brand_id: string;
     brand: string;
+    model_id: string;
     model: string;
     description: string | null;
     specs: string | null;
@@ -79,6 +86,7 @@ const STORAGE_OPTIONS = [32, 64, 128, 256, 512, 1024];
 
 export default function ProductForm({
   categories,
+  brands,
   product,
   images = [],
   variants = [],
@@ -91,8 +99,12 @@ export default function ProductForm({
 
   // Basic info
   const [categoryId, setCategoryId] = useState(product?.category_id ?? "");
-  const [brand, setBrand] = useState(product?.brand ?? "");
-  const [model, setModel] = useState(product?.model ?? "");
+  const [brandModel, setBrandModel] = useState<BrandModelValue>({
+    brandId: product?.brand_id ?? "",
+    brandName: product?.brand ?? "",
+    modelId: product?.model_id ?? "",
+    modelName: product?.model ?? "",
+  });
   const [description, setDescription] = useState(product?.description ?? "");
   const [specs, setSpecs] = useState(product?.specs ?? "");
 
@@ -185,7 +197,7 @@ export default function ProductForm({
   async function removeExistingImage(id: string, url: string) {
     const path = url.split("/product-images/")[1];
     await supabase.storage.from("product-images").remove([path]);
-    await supabase.from("product_images").delete().eq("id", id);
+    await deleteProductImage(id);
     setExistingImages((prev) => prev.filter((img) => img.id !== id));
   }
 
@@ -196,19 +208,23 @@ export default function ProductForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!brandModel.brandId) return toast.error("Please select a brand");
+    if (!brandModel.modelId) return toast.error("Please select a model");
+
     setLoading(true);
 
     try {
       const slug = isEdit
         ? product.slug
-        : `${brand}-${model}-${uuidv4().slice(0, 6)}`
+        : `${brandModel.brandName}-${brandModel.modelName}-${uuidv4().slice(0, 6)}`
             .toLowerCase()
             .replace(/\s+/g, "-");
 
       const productData = {
         category_id: categoryId,
-        brand,
-        model,
+        brand_id: brandModel.brandId,
+        model_id: brandModel.modelId,
         description: description || null,
         specs: specs || null,
         ram_gb: ramGb ? parseInt(ramGb) : null,
@@ -295,24 +311,11 @@ export default function ProductForm({
             </Select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label>Brand</Label>
-              <Input
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Model</Label>
-              <Input
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                required
-              />
-            </div>
-          </div>
+          <BrandModelSelect
+            brands={brands}
+            value={brandModel}
+            onChange={setBrandModel}
+          />
 
           <div className="space-y-1">
             <Label>Description</Label>
@@ -432,7 +435,6 @@ export default function ProductForm({
           <div className="space-y-3">
             {variantRows.map((row, index) => (
               <div key={index} className="space-y-2 bg-gray-50 p-3 rounded-lg">
-                {/* Row 1: Condition + Status + Remove */}
                 <div className="grid grid-cols-12 gap-2 items-end">
                   <div className="col-span-6 space-y-1">
                     <Label className="text-xs">Grade / Condition</Label>
@@ -489,7 +491,6 @@ export default function ProductForm({
                   </div>
                 </div>
 
-                {/* Row 2: Price + MRP + Stock + Battery */}
                 <div className="grid grid-cols-4 gap-2">
                   <div className="space-y-1">
                     <Label className="text-xs">Price (₹)</Label>
