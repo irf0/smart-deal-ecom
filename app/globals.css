@@ -7,16 +7,16 @@
 
 @theme inline {
   /* SmartDeal warm soft-UI design tokens */
-  --color-surface: #F0E6D8;
-  --color-surface-light: #FFFAF4;
-  --color-surface-dark: #C8B8A4;
-  --color-ink: #2C2218;
-  --color-ink-muted: #6E5F4F;
-  --color-accent: #D4532A;
-  --color-accent-hover: #B8431F;
-  --color-accent-warm: #E8A317;
-  --color-success: #3A8F5C;
-  --color-strike: #A89482;
+  --color-surface: #f0e6d8;
+  --color-surface-light: #fffaf4;
+  --color-surface-dark: #c8b8a4;
+  --color-ink: #2c2218;
+  --color-ink-muted: #6e5f4f;
+  --color-accent: #d4532a;
+  --color-accent-hover: #b8431f;
+  --color-accent-warm: #e8a317;
+  --color-success: #3a8f5c;
+  --color-strike: #a89482;
   --radius-neu-sm: 12px;
   --radius-neu: 20px;
   --radius-neu-lg: 28px;
@@ -25,11 +25,11 @@
   --sd-shadow-dark: 200 184 164;
   --sd-shadow-light: 255 250 244;
 
-  --color-brand-blue: #2563EB;
-  --color-brand-dark: #0F172A;
-  --color-brand-indigo: #6366F1;
-  --color-brand-silver: #F8FAFC;
-  --color-brand-whatsapp: #25D366;
+  --color-brand-blue: #2563eb;
+  --color-brand-dark: #0f172a;
+  --color-brand-indigo: #6366f1;
+  --color-brand-silver: #f8fafc;
+  --color-brand-whatsapp: #25d366;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -175,7 +175,9 @@
   }
 
   .neu-hover-lift {
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    transition:
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
   }
 
   .neu-hover-lift:hover {
@@ -186,24 +188,28 @@
   }
 
   /* scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 7px;
-}
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 7px;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #F3ECE3;
-  border-radius: 999px;
-}
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f3ece3;
+    border-radius: 999px;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #D4532A;
-  border-radius: 999px;
-  border: 2px solid #F3ECE3;
-}
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #d4532a;
+    border-radius: 999px;
+    border: 2px solid #f3ece3;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #C94E24;
-}
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c94e24;
+  }
+
+  .input {
+    @apply w-full border border-[#E5DDD0] rounded-lg px-3 py-2 text-sm text-[#2B2620] focus:outline-none focus:ring-2 focus:ring-[#C15F3C]/30 focus:border-[#C15F3C];
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .neu-hover-lift {

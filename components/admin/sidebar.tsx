@@ -12,6 +12,7 @@ import {
   BadgeDollarSign,
   Clapperboard,
   Palette,
+  FilePen,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -30,6 +31,11 @@ const links = [
     href: "/admin/brandlogos",
     label: "Brand Logos Settings",
     icon: Palette,
+  },
+  {
+    href: "/admin/policy",
+    label: "Policy Table Settings",
+    icon: FilePen,
   },
 ];
 

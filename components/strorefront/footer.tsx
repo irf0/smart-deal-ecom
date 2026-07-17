@@ -94,7 +94,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <ShieldCheck size={14} className="text-accent" />
               <Link
-                href="/"
+                href="/policy"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 Warranty
@@ -104,7 +104,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <RotateCcw size={14} className="text-accent" />
               <Link
-                href="/"
+                href="/policy"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 Returns
@@ -114,7 +114,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <HelpCircle size={14} className="text-accent" />
               <Link
-                href="/"
+                href="/policy"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 FAQ
@@ -124,7 +124,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <MessageCircle size={14} className="text-accent" />
               <Link
-                href="/"
+                href="/policy"
                 className="hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded-neu-sm px-1 py-0.5 inline-flex"
               >
                 Contact
