@@ -10,25 +10,83 @@ const SECTION_ORDER = [
   "warranty",
   "returns",
   "contact",
-];
+] as const;
+
+/* -------------------------------------------------------------------------- */
+/*                                    Types                                   */
+/* -------------------------------------------------------------------------- */
+
+type PolicyBlockType = "intro" | "table" | "icons";
+
+interface PolicyBlockBase {
+  idx: number;
+  id: string;
+  section_slug: string;
+  section_title: string;
+  section_subtitle: string | null;
+  position: number;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface PolicyIntroContent {
+  text: string;
+}
+
+interface PolicyTableContent {
+  columns: string[];
+  rows: string[][];
+}
+
+interface PolicyIconsContent {
+  items: string[];
+}
+
+interface PolicyIntroBlock extends PolicyBlockBase {
+  block_type: "intro";
+  content: PolicyIntroContent;
+}
+
+interface PolicyTableBlock extends PolicyBlockBase {
+  block_type: "table";
+  content: PolicyTableContent;
+}
+
+interface PolicyIconsBlock extends PolicyBlockBase {
+  block_type: "icons";
+  content: PolicyIconsContent;
+}
+
+type PolicyBlock = PolicyIntroBlock | PolicyTableBlock | PolicyIconsBlock;
+
+/* -------------------------------------------------------------------------- */
 
 export default async function PolicyPage() {
   const supabase = createClient();
-  const { data: blocks } = await supabase
+
+  const { data } = await supabase
     .from("policy_blocks")
     .select("*")
     .eq("is_published", true)
     .order("position");
 
-  const sections = new Map<string, any[]>();
-  blocks?.forEach((b) => {
-    if (!sections.has(b.section_slug)) sections.set(b.section_slug, []);
-    sections.get(b.section_slug)!.push(b);
+  const blocks = data as PolicyBlock[] | null;
+
+  const sections = new Map<string, PolicyBlock[]>();
+
+  blocks?.forEach((block) => {
+    if (!sections.has(block.section_slug)) {
+      sections.set(block.section_slug, []);
+    }
+    sections.get(block.section_slug)!.push(block);
   });
 
   const orderedSlugs = [
-    ...SECTION_ORDER.filter((s) => sections.has(s)),
-    ...Array.from(sections.keys()).filter((s) => !SECTION_ORDER.includes(s)),
+    ...SECTION_ORDER.filter((slug) => sections.has(slug)),
+    ...Array.from(sections.keys()).filter(
+      (slug) => !SECTION_ORDER.includes(slug as (typeof SECTION_ORDER)[number]),
+    ),
   ];
 
   if (orderedSlugs.length === 0) {
@@ -48,6 +106,7 @@ export default async function PolicyPage() {
             <p className="text-xs uppercase tracking-wide text-[#8A8175] mb-3 font-medium">
               On this page
             </p>
+
             {orderedSlugs.map((slug) => (
               <a
                 key={slug}
@@ -64,8 +123,9 @@ export default async function PolicyPage() {
         <div className="space-y-16">
           <header>
             <h1 className="text-3xl font-bold text-[#2B2620] tracking-tight">
-              Policies & Grading Guide
+              Policies &amp; Grading Guide
             </h1>
+
             <p className="text-[#8A8175] mt-2">
               Everything you need to know about our grading, warranty, and
               returns.
@@ -74,18 +134,21 @@ export default async function PolicyPage() {
 
           {orderedSlugs.map((slug) => {
             const sectionBlocks = sections.get(slug)!;
+
             return (
               <section key={slug} id={slug} className="scroll-mt-8">
                 <div className="mb-5">
                   <h2 className="text-xl font-semibold text-[#2B2620]">
                     {sectionBlocks[0].section_title}
                   </h2>
+
                   {sectionBlocks[0].section_subtitle && (
                     <p className="text-sm text-[#8A8175] mt-1">
                       {sectionBlocks[0].section_subtitle}
                     </p>
                   )}
                 </div>
+
                 <div className="space-y-5">
                   {sectionBlocks.map((block) => (
                     <Block key={block.id} block={block} />
@@ -100,68 +163,73 @@ export default async function PolicyPage() {
   );
 }
 
-function Block({ block }: { block: any }) {
-  if (block.block_type === "intro") {
-    return (
-      <div className="bg-white border border-[#E5DDD0] rounded-xl p-5 text-sm text-[#2B2620] leading-relaxed">
-        {block.content.text}
-      </div>
-    );
-  }
+function Block({ block }: { block: PolicyBlock }) {
+  switch (block.block_type) {
+    case "intro":
+      return (
+        <div className="bg-white border border-[#E5DDD0] rounded-xl p-5 text-sm text-[#2B2620] leading-relaxed">
+          {block.content.text}
+        </div>
+      );
 
-  if (block.block_type === "table") {
-    return (
-      <div className="bg-white border border-[#E5DDD0] rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-[#FBF7F1]">
-                {block.content.columns.map((c: string) => (
-                  <th
-                    key={c}
-                    className="text-left font-medium text-[#2B2620] p-3 border-b border-[#E5DDD0] whitespace-nowrap"
-                  >
-                    {c}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {block.content.rows.map((row: string[], i: number) => (
-                <tr key={i} className={i % 2 === 1 ? "bg-[#FBF7F1]/40" : ""}>
-                  {row.map((cell, j) => (
-                    <td
-                      key={j}
-                      className="p-3 align-top text-[#2B2620] border-b border-[#E5DDD0] last:border-b-0"
+    case "table":
+      return (
+        <div className="bg-white border border-[#E5DDD0] rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-[#FBF7F1]">
+                  {block.content.columns.map((column) => (
+                    <th
+                      key={column}
+                      className="text-left font-medium text-[#2B2620] p-3 border-b border-[#E5DDD0] whitespace-nowrap"
                     >
-                      {cell}
-                    </td>
+                      {column}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {block.content.rows.map((row, rowIndex) => (
+                  <tr
+                    key={rowIndex}
+                    className={rowIndex % 2 ? "bg-[#FBF7F1]/40" : ""}
+                  >
+                    {row.map((cell, cellIndex) => (
+                      <td
+                        key={cellIndex}
+                        className="p-3 align-top text-[#2B2620] border-b border-[#E5DDD0] last:border-b-0"
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
 
-  if (block.block_type === "icons") {
-    return (
-      <div className="flex gap-3 flex-wrap">
-        {block.content.items.map((label: string) => (
-          <span
-            key={label}
-            className="inline-flex items-center gap-2 text-xs font-medium text-[#C15F3C] bg-[#C15F3C]/10 border border-[#C15F3C]/20 rounded-full px-4 py-2"
-          >
-            <ShieldIcon /> {label}
-          </span>
-        ))}
-      </div>
-    );
-  }
+    case "icons":
+      return (
+        <div className="flex gap-3 flex-wrap">
+          {block.content.items.map((label) => (
+            <span
+              key={label}
+              className="inline-flex items-center gap-2 text-xs font-medium text-[#C15F3C] bg-[#C15F3C]/10 border border-[#C15F3C]/20 rounded-full px-4 py-2"
+            >
+              <ShieldIcon />
+              {label}
+            </span>
+          ))}
+        </div>
+      );
 
-  return null;
+    default:
+      return null;
+  }
 }
 
 function ShieldIcon() {
