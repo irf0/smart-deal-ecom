@@ -153,11 +153,15 @@ export default async function SellRequestsPage() {
       {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
         {requests?.map((r) => (
-          <Link
-            href={`/admin/sell-requests/${r.id}`}
+          <div
             key={r.id}
-            className="block bg-white border rounded-lg p-4 space-y-3"
+            className="relative bg-white border rounded-lg p-4 space-y-3"
           >
+            <Link
+              href={`/admin/sell-requests/${r.id}`}
+              className="absolute inset-0"
+              aria-label={`View details for ${r.brand} ${r.model}`}
+            />
             <div className="flex justify-between items-start gap-3">
               <div>
                 <h2 className="font-semibold">
@@ -177,7 +181,7 @@ export default async function SellRequestsPage() {
                 )}
               </div>
 
-              <div onClick={(e) => e.preventDefault()}>
+              <div className="relative z-10">
                 <SellRequestStatus id={r.id} status={r.status} />
               </div>
             </div>
@@ -215,7 +219,7 @@ export default async function SellRequestsPage() {
             </div>
 
             {r.image_urls?.length > 0 && (
-              <div className="flex gap-2">
+              <div className="relative z-10 flex gap-2">
                 {r.image_urls.slice(0, 3).map((url: string, i: number) => (
                   <img
                     key={i}
@@ -225,7 +229,7 @@ export default async function SellRequestsPage() {
                 ))}
               </div>
             )}
-          </Link>
+          </div>
         ))}
 
         {!requests?.length && (
