@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
+import Image from "next/image";
 
 const NAV_LINKS = [
   { label: "Smartphones", href: "/product?category=Phones" },
@@ -92,12 +93,16 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full h-16 bg-surface backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 h-full relative flex items-center justify-between">
         {/* LEFT — Logo */}
-        <Link
-          href="/"
-          className="text-ink font-semibold tracking-tight uppercase text-lg md:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-muted/50 focus-visible:ring-offset-2 rounded-sm"
-        >
-          SMART <span className="text-accent">DEAL</span>
-        </Link>
+        <div className="flex items-center ">
+          <Image src="/logo.png" alt="Company Logo" width={50} height={50} />
+
+          <Link
+            href="/"
+            className="text-ink font-semibold tracking-tight uppercase text-lg md:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-muted/50 focus-visible:ring-offset-2 rounded-sm"
+          >
+            SMART <span className="text-accent">DEAL</span>
+          </Link>
+        </div>
 
         {/* CENTER — Desktop navigation (visually centered) */}
         <nav
