@@ -156,10 +156,10 @@ export default function CartPage() {
         `\n\nTotal: ₹${finalPrice.toLocaleString("en-IN")}`;
 
       if (waWindow) {
-        waWindow.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+        waWindow.location.href = `https://wa.me/${`9132992877`}?text=${encodeURIComponent(message)}`;
       } else {
         // popup was blocked despite our best effort — fall back
-        window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+        window.location.href = `https://wa.me/${`9132992877`}?text=${encodeURIComponent(message)}`;
       }
       clearCart();
     } catch (err) {
